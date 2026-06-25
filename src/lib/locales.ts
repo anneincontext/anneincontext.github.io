@@ -19,7 +19,8 @@ export const locales = {
     social: {
       x: 'https://x.com/anneincontext',
       linkedin: 'https://www.linkedin.com/in/annie01/',
-      instagram: 'https://www.instagram.com/anne0210li/'
+      instagram: 'https://www.instagram.com/anne0210li/',
+      email: 'mailto:liyanlun.anne@gmail.com'
     }
   },
   zh: {
@@ -40,7 +41,8 @@ export const locales = {
     social: {
       x: 'https://x.com/anne_lyl',
       linkedin: 'https://www.linkedin.com/in/annie01/',
-      instagram: 'https://www.instagram.com/anne0210li/'
+      instagram: 'https://www.instagram.com/anne0210li/',
+      email: 'mailto:liyanlun.anne@gmail.com'
     }
   }
 } as const;

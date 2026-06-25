@@ -488,9 +488,17 @@ h3 {
 }
 
 .social-icon-link svg {
-  width: 18px;
-  height: 18px;
+  width: var(--social-icon-size, 17px);
+  height: var(--social-icon-size, 17px);
   fill: currentColor;
+}
+
+.social-icon-link--instagram {
+  --social-icon-size: 19px;
+}
+
+.social-icon-link--email {
+  --social-icon-size: 20px;
 }
 
 .about-profile {

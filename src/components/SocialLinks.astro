@@ -10,19 +10,24 @@ const locale = getLocale(lang);
 ---
 
 <nav class="social-icon-links" aria-label={lang === 'zh' ? '社交链接' : 'Social links'}>
-  <a class="social-icon-link" href={locale.social.x} target="_blank" rel="noopener" aria-label="X">
+  <a class="social-icon-link social-icon-link--x" href={locale.social.x} target="_blank" rel="noopener" aria-label="X">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M14.3 10.2 22.2 1h-1.9l-6.9 8-5.5-8H1.6l8.3 12.1L1.6 23h1.9l7.2-8.4 5.8 8.4h6.3l-8.5-12.8Zm-2.6 3-0.8-1.2L4.2 2.4H7l5.4 7.7 0.8 1.2 7 10.1h-2.8l-5.7-8.2Z" />
     </svg>
   </a>
-  <a class="social-icon-link" href={locale.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+  <a class="social-icon-link social-icon-link--linkedin" href={locale.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.28 8.25h4.45V23H.28V8.25Zm7.36 0h4.26v2.02h.06c.6-1.13 2.05-2.33 4.22-2.33 4.51 0 5.34 2.97 5.34 6.83V23h-4.45v-7.3c0-1.74-.03-3.98-2.43-3.98-2.43 0-2.8 1.9-2.8 3.86V23H7.64V8.25Z" />
     </svg>
   </a>
-  <a class="social-icon-link" href={locale.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">
+  <a class="social-icon-link social-icon-link--instagram" href={locale.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7.25A4.75 4.75 0 1 1 12 16.75 4.75 4.75 0 0 1 12 7.25Zm0 2A2.75 2.75 0 1 0 12 14.75 2.75 2.75 0 0 0 12 9.25ZM17.25 6.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z" />
+    </svg>
+  </a>
+  <a class="social-icon-link social-icon-link--email" href={locale.social.email} aria-label="Email">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 3.2v10.3c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V7.2l-7.4 5.7a1 1 0 0 1-1.2 0L4 7.2Zm1.4-1.2 6.6 5.1L18.6 6H5.4Z" />
     </svg>
   </a>
 </nav>
