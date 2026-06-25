@@ -1,0 +1,115 @@
+---
+import type { Lang } from '../lib/locales';
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const portraitUrl = 'https://github.com/anneincontext.png?size=360';
+---
+
+{lang === 'zh' ? (
+  <>
+    <section class="page-heading about-hero">
+      <div class="about-media">
+        <figure class="about-portrait" aria-label="Anne Li">
+          <img
+            src={portraitUrl}
+            alt=""
+            width="220"
+            height="220"
+            decoding="async"
+          />
+        </figure>
+        <SocialLinks lang="zh" />
+      </div>
+      <div class="about-copy">
+        <p>
+          我是 Anne Li。过去十年里，我在创业公司、小团队和大型科技公司都做过前端工程师。
+        </p>
+        <p>
+          在工程工作之外，我也一直活跃在开发者社区。我喜欢帮助开发者解决问题、补齐上下文、连接彼此，也喜欢组织技术讨论，让有用的工具、产品和想法更容易被理解。
+        </p>
+      </div>
+    </section>
+
+    <section class="about-profile">
+      <div class="about-lede">
+        <h3>我在做什么</h3>
+        <p>
+          我喜欢做产品、工程和社区之间的桥：Developer Experience、技术内容、开发者活动、社区运营、产品反馈循环，以及那些让开发者从“看不懂”到“愿意试一试”的上下文整理。
+        </p>
+        <p>
+          我擅长把复杂的技术信息讲清楚，把合适的人带到同一个房间，也把一个工具、产品或生态放到更容易被理解的位置上。
+        </p>
+      </div>
+      <ul class="about-facts" aria-label="经历亮点">
+        <li><span>10+ 年</span> 自 2016 年起的工程与开发者生态经验</li>
+        <li>
+          <span>20+ 国家</span>
+          <span class="country-flags" aria-label="走访国家与地区">🇨🇳🇸🇬🇹🇭🇮🇩🇲🇾🇻🇳🇯🇵🇳🇵🇬🇧🇪🇸🇵🇹🇫🇷🇳🇱🇩🇪🇨🇿🇦🇹🇭🇺🇮🇹🇻🇦🇬🇷🇹🇷🇦🇪</span>
+          我去过 20+ 国家，将来会更多
+        </li>
+      </ul>
+    </section>
+
+  </>
+) : (
+  <>
+    <section class="page-heading about-hero">
+      <div class="about-media">
+        <figure class="about-portrait" aria-label="Anne Li">
+          <img
+            src={portraitUrl}
+            alt=""
+            width="220"
+            height="220"
+            decoding="async"
+          />
+        </figure>
+        <SocialLinks lang="en" />
+      </div>
+      <div class="about-copy">
+        <p>
+          I am Anne Li. Over the past decade, I have worked as a frontend engineer
+          across startups, smaller teams, and large technology companies.
+        </p>
+        <p>
+          Alongside my engineering work, I have stayed active in developer
+          communities because I like helping developers feel less alone with hard
+          problems: sharing context, connecting people, organizing technical
+          conversations, and making useful tools and ideas easier to understand.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-profile">
+      <div class="about-lede">
+        <h3>What I Do</h3>
+        <p>
+          I work where product, engineering, and community meet: developer
+          experience, technical content, community programs, events, product
+          feedback loops, and the small connective tissue that helps developers
+          feel oriented instead of lost.
+        </p>
+        <p>
+          My strongest work tends to combine execution and translation: turning
+          complex technical context into useful stories, bringing the right people
+          into the same room, and making an ecosystem feel more legible from the
+          outside.
+        </p>
+      </div>
+      <ul class="about-facts" aria-label="Highlights">
+        <li><span>10+ years</span> engineering and developer ecosystem experience since 2016</li>
+        <li>
+          <span>20+ countries</span>
+          <span class="country-flags" aria-label="Countries and regions visited">🇨🇳🇸🇬🇹🇭🇮🇩🇲🇾🇻🇳🇯🇵🇳🇵🇬🇧🇪🇸🇵🇹🇫🇷🇳🇱🇩🇪🇨🇿🇦🇹🇭🇺🇮🇹🇻🇦🇬🇷🇹🇷🇦🇪</span>
+          I have visited 20+ countries, with more to come
+        </li>
+      </ul>
+    </section>
+
+  </>
+)}

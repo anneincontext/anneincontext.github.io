@@ -1,0 +1,201 @@
+---
+import '../styles/global.css';
+import { getLocale, type Lang } from '../lib/locales';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: Lang;
+  alternatePath?: string;
+}
+
+const {
+  title = 'Anne',
+  lang = 'en',
+  alternatePath
+} = Astro.props;
+
+const locale = getLocale(lang);
+const description = Astro.props.description ?? locale.description;
+const pageTitle = title === 'Anne' ? title : `${title} | Anne`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const resolvedAlternatePath = alternatePath ?? locale.alternatePath;
+const alternateUrl = new URL(resolvedAlternatePath, Astro.site);
+const alternateLang = lang === 'en' ? 'zh-CN' : 'en';
+const alternateTargetLang = lang === 'en' ? 'zh' : 'en';
+const homeLabel = 'Home';
+const normalizedPath = Astro.url.pathname.endsWith('/')
+  ? Astro.url.pathname
+  : `${Astro.url.pathname}/`;
+const isHomePage = normalizedPath === '/' || normalizedPath === '/zh/';
+const githubAvatarIcon = 'https://github.com/anneincontext.png?size=64';
+const githubAvatarTouchIcon = 'https://github.com/anneincontext.png?size=180';
+---
+
+<!doctype html>
+<html lang={locale.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Anne" />
+    <link rel="icon" type="image/png" href={githubAvatarIcon} />
+    <link rel="apple-touch-icon" href={githubAvatarTouchIcon} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={locale.htmlLang} href={canonical} />
+    <link rel="alternate" hreflang={alternateLang} href={alternateUrl} />
+    <link rel="alternate" type="application/rss+xml" title="Anne" href="/rss.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Anne" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <script is:inline>
+      (() => {
+        const getTimeBasedTheme = () => {
+          const hour = new Date().getHours();
+          return hour >= 19 || hour < 6 ? 'dark' : 'light';
+        };
+
+        try {
+          const storedTheme = localStorage.getItem('anne:theme');
+          const theme = storedTheme === 'dark' || storedTheme === 'light'
+            ? storedTheme
+            : getTimeBasedTheme();
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = getTimeBasedTheme();
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <header class={`site-header${isHomePage ? ' site-header-home' : ''}`}>
+      {!isHomePage && (
+        <a class="brand-home" href={locale.homePath} aria-label="Back to home">
+          {homeLabel}
+        </a>
+      )}
+      <div class="header-actions">
+        <nav class="site-nav" aria-label="Primary">
+          <a href={locale.blogPath}>{locale.blogLabel}</a>
+          <a href={locale.podcastPath}>{locale.podcastLabel}</a>
+          <a href="/rss.xml">RSS</a>
+        </nav>
+        <button class="theme-toggle icon-button" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <span class="theme-toggle-track" aria-hidden="true">
+            <span class="theme-toggle-thumb">
+              <svg class="theme-toggle-icon theme-icon-sun" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2.5v2.3M12 19.2v2.3M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M2.5 12h2.3M19.2 12h2.3M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path>
+              </svg>
+              <svg class="theme-toggle-icon theme-icon-moon" viewBox="0 0 24 24">
+                <path d="M19.4 14.5A7.2 7.2 0 0 1 9.5 4.6a7.7 7.7 0 1 0 9.9 9.9Z"></path>
+                <path d="M17.5 5.5h.01M19.5 8.5h.01M15.5 8.5h.01"></path>
+              </svg>
+            </span>
+          </span>
+        </button>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <a
+        class="language-switch"
+        href={resolvedAlternatePath}
+        data-lang-switch={alternateTargetLang}
+        aria-label={`Switch language to ${locale.alternateLabel}`}
+        title={`Switch language to ${locale.alternateLabel}`}
+      >
+        <span class={lang === 'zh' ? 'language-switch-active' : undefined}>中文</span>
+        <span class={lang === 'en' ? 'language-switch-active' : undefined}>English</span>
+      </a>
+      <p>© {new Date().getFullYear()} Anne.</p>
+    </footer>
+    <script is:inline>
+      (() => {
+        const storageKey = 'anne:language';
+        const zhRoutes = {
+          '/': '/zh/',
+          '/blog/': '/zh/blog/',
+          '/about/': '/zh/about/',
+          '/podcast/': '/zh/podcast/'
+        };
+
+        const normalizedPath = location.pathname.endsWith('/')
+          ? location.pathname
+          : `${location.pathname}/`;
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          const link = target instanceof Element
+            ? target.closest('[data-lang-switch]')
+            : null;
+          if (!link) return;
+
+          try {
+            localStorage.setItem(storageKey, link.dataset.langSwitch);
+          } catch {
+            // localStorage can be unavailable in private or locked-down browsing contexts.
+          }
+        });
+
+        try {
+          const storedPreference = localStorage.getItem(storageKey);
+          const browserLanguages = navigator.languages?.length
+            ? navigator.languages
+            : [navigator.language];
+          const browserPrefersZh = browserLanguages.some((value) => /^zh\b/i.test(value));
+          const preferredLanguage = storedPreference || (browserPrefersZh ? 'zh' : 'en');
+          const zhRoute = zhRoutes[normalizedPath];
+
+          if (preferredLanguage === 'zh' && zhRoute && zhRoute !== normalizedPath) {
+            location.replace(`${zhRoute}${location.search}${location.hash}`);
+          }
+        } catch {
+          // If preferences cannot be read, keep the current URL stable.
+        }
+
+        const themeKey = 'anne:theme';
+        const themeButton = document.querySelector('.theme-toggle');
+        const getTimeBasedTheme = () => {
+          const hour = new Date().getHours();
+          return hour >= 19 || hour < 6 ? 'dark' : 'light';
+        };
+        const setTheme = (theme) => {
+          document.documentElement.dataset.theme = theme;
+          themeButton?.setAttribute(
+            'aria-label',
+            theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+          );
+          themeButton?.setAttribute(
+            'title',
+            theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+          );
+        };
+
+        try {
+          setTheme(document.documentElement.dataset.theme || getTimeBasedTheme());
+        } catch {
+          // Keep the time-based theme if browser storage or media APIs are unavailable.
+        }
+
+        themeButton?.addEventListener('click', () => {
+          const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          setTheme(nextTheme);
+
+          try {
+            localStorage.setItem(themeKey, nextTheme);
+          } catch {
+            // Theme preference is optional; the visual toggle can still work for this page.
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

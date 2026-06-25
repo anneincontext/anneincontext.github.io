@@ -1,0 +1,165 @@
+---
+import type { Lang } from '../lib/locales';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+
+const zhEpisodes = [
+  {
+    title: '赵海平与张宏波聊聊编程语言',
+    show: '掘金直播',
+    publishedAt: '2021-11-16T09:00:00.000Z',
+    duration: 'Web Infra 大咖面对面',
+    url: 'https://juejin.cn/live/rescript-lang'
+  },
+  {
+    title: '把30岁过成我想要的20岁：在新加坡被裁后，全球旅居',
+    show: '操场',
+    publishedAt: '2025-11-19T10:00:00.000Z',
+    duration: '83 min',
+    url: 'https://www.xiaoyuzhoufm.com/episode/691d3a7d6018cc2c98895c51'
+  },
+  {
+    title: '不安分的灵魂：非典型程序员Anne的“漂泊”与职业选择',
+    show: '浪说播客',
+    publishedAt: '2025-06-23T23:30:00.000Z',
+    duration: '55 min',
+    url: 'https://www.xiaoyuzhoufm.com/episode/685aa2c4caf6efb83f3ebf84'
+  },
+  {
+    title: '安妮：生活、工作都有周期，那什么样的生活是你想要的？',
+    show: 'Web Worker-AI程序员都爱听',
+    publishedAt: '2024-07-12T00:37:27.021Z',
+    duration: '110 min',
+    url: 'https://www.xiaoyuzhoufm.com/episode/66907ac737236c546e8a140f'
+  },
+  {
+    title: '我在新加坡大厂上班，付不起外卖费',
+    show: '操场',
+    publishedAt: '2024-04-08T02:24:15.443Z',
+    duration: '51 min',
+    url: 'https://www.xiaoyuzhoufm.com/episode/661355504f66d1c1daab8761'
+  },
+  {
+    title: '和安妮聊社区运营、前端学习、个人成长',
+    show: 'Web Worker-AI程序员都爱听',
+    publishedAt: '2022-02-23T01:28:12.623Z',
+    duration: '63 min',
+    url: 'https://www.xiaoyuzhoufm.com/episode/62158dac42107d36fefdf923'
+  }
+].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
+
+const enEpisodes: typeof zhEpisodes = [
+  {
+    title: 'Reactive Programming & RxJS',
+    show: 'Juejin Live',
+    publishedAt: '2022-06-07T12:00:00.000Z',
+    duration:  'Web Infra Face to Face',
+    url: 'https://juejin.cn/live/rxjs'
+  },
+  {
+    title: 'JavaScript State Machines & XState',
+    show: 'Juejin Live',
+    publishedAt: '2022-04-26T12:00:00.000Z',
+    duration:  'Web Infra Face to Face',
+    url: 'https://juejin.cn/live/XState'
+  },
+  {
+    title: 'The Past and Future of Cross-Platform Development',
+    show: 'Juejin Live',
+    publishedAt: '2022-03-29T12:00:00.000Z',
+    duration:  'Web Infra Face to Face',
+    url: 'https://juejin.cn/live/uni-app'
+  },
+  {
+    title: 'The Future of Frontend & Vercel',
+    show: 'Juejin Live',
+    publishedAt: '2022-02-22T12:00:00.000Z',
+    duration:  'Web Infra Face to Face',
+    url: 'https://juejin.cn/live/vercel'
+  },
+  {
+    title: 'VR, WebGL & Three.js',
+    show: 'Juejin Live',
+    publishedAt: '2021-12-21T12:00:00.000Z',
+    duration:  'Web Infra Face to Face',
+    url: 'https://juejin.cn/live/three-js'
+  }
+].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
+const episodes = lang === 'zh' ? zhEpisodes : enEpisodes;
+const sortLabel = lang === 'zh' ? '最新在前' : 'Newest first';
+const sortNextLabel = lang === 'zh' ? '最早在前' : 'Oldest first';
+
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat(lang === 'zh' ? 'zh-CN' : 'en', {
+    year: 'numeric',
+    month: lang === 'zh' ? 'long' : 'short',
+    day: 'numeric',
+    timeZone: 'UTC'
+  }).format(new Date(value));
+---
+
+<section class="archive-page podcast-section" aria-label={lang === 'zh' ? '播客列表' : 'Podcast episodes'}>
+  {episodes.length > 0 ? (
+    <>
+      <div class="podcast-toolbar">
+        <button
+          class="podcast-sort-button"
+          type="button"
+          data-podcast-sort
+          data-order="desc"
+          data-desc-label={sortLabel}
+          data-asc-label={sortNextLabel}
+        >
+          {sortLabel}
+        </button>
+      </div>
+      <ol class="post-list podcast-list" data-podcast-list>
+        {episodes.map((episode) => (
+        <li data-published-at={episode.publishedAt}>
+          <article class="post-card podcast-item">
+            <div class="post-title-line podcast-title-line">
+              <h3><a href={episode.url} target="_blank" rel="noreferrer">{episode.title}</a></h3>
+              <p>{episode.show} · {episode.duration}</p>
+            </div>
+            <footer>
+              <time datetime={episode.publishedAt}>{formatDate(episode.publishedAt)}</time>
+            </footer>
+          </article>
+        </li>
+        ))}
+      </ol>
+    </>
+  ) : (
+    <p class="empty-state empty-podcasts">Coming soon ...</p>
+  )}
+</section>
+
+<script>
+  (() => {
+    const sortButton = document.querySelector('[data-podcast-sort]');
+    const list = document.querySelector('[data-podcast-list]');
+    if (!(sortButton instanceof HTMLButtonElement) || !(list instanceof HTMLOListElement)) return;
+
+    sortButton.addEventListener('click', () => {
+      const nextOrder = sortButton.dataset.order === 'desc' ? 'asc' : 'desc';
+      const items = Array.from(list.querySelectorAll<HTMLLIElement>('li[data-published-at]'));
+
+      items
+        .sort((a, b) => {
+          const first = Date.parse(a.dataset.publishedAt || '');
+          const second = Date.parse(b.dataset.publishedAt || '');
+          return nextOrder === 'desc' ? second - first : first - second;
+        })
+        .forEach((item) => list.append(item));
+
+      sortButton.dataset.order = nextOrder;
+      sortButton.textContent = nextOrder === 'desc'
+        ? sortButton.dataset.descLabel || 'Newest first'
+        : sortButton.dataset.ascLabel || 'Oldest first';
+    });
+  })();
+</script>

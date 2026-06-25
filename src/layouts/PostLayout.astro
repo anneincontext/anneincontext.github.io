@@ -1,0 +1,150 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { getLocale, type Lang } from '../lib/locales';
+import { formatDate } from '../lib/posts';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  category: string;
+  lang: Lang;
+  headings?: Array<{
+    depth: number;
+    slug: string;
+    text: string;
+  }>;
+}
+
+const { title, description, date, tags, category, lang, headings = [] } = Astro.props;
+const locale = getLocale(lang);
+const outlineHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+const outlineLabel = lang === 'zh' ? '目录' : 'Contents';
+const outlineToggleLabel = lang === 'zh' ? '显示或隐藏目录' : 'Show or hide contents';
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <article class="post-shell">
+    {
+      outlineHeadings.length > 0 && (
+        <div
+          class="post-outline-panel"
+          data-post-outline
+        >
+          <nav class="post-outline" id="post-outline-list" aria-label={outlineLabel}>
+            <p>{outlineLabel}</p>
+            <ol>
+              {outlineHeadings.map((heading, index) => (
+                <li class={`post-outline-depth-${heading.depth}`} style={`--outline-index: ${index}`}>
+                  <a href={`#${heading.slug}`} data-outline-link={heading.slug}>{heading.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+          <button
+            class="post-outline-toggle"
+            type="button"
+            aria-controls="post-outline-list"
+            aria-expanded="true"
+            aria-label={outlineToggleLabel}
+            title={outlineToggleLabel}
+            data-post-outline-toggle
+          >
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+      )
+    }
+    <a class="eyebrow-link" href={locale.blogPath}>← {locale.backToBlog}</a>
+    <header class="post-hero">
+      <h2>{title}</h2>
+      <div class="post-meta">
+        <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{category}</span>
+        {tags.length > 0 && <span aria-hidden="true">·</span>}
+        {tags.length > 0 && <span>{tags.join(' / ')}</span>}
+      </div>
+    </header>
+    <div class="post-content">
+      <slot />
+    </div>
+  </article>
+  <script is:inline>
+    (() => {
+      const panel = document.querySelector('[data-post-outline]');
+      const button = panel?.querySelector('[data-post-outline-toggle]');
+
+      if (!(panel instanceof HTMLElement) || !(button instanceof HTMLButtonElement)) return;
+
+      const outline = panel.querySelector('#post-outline-list');
+      const links = Array.from(panel.querySelectorAll('[data-outline-link]'))
+        .filter((link) => link instanceof HTMLAnchorElement);
+      const sections = links
+        .map((link) => {
+          const target = document.getElementById(link.dataset.outlineLink || '');
+          return target ? { link, target } : null;
+        })
+        .filter(Boolean);
+      const mobileOutline = window.matchMedia('(max-width: 1219px)');
+      const setCollapsed = (isCollapsed) => {
+        panel.dataset.collapsed = String(isCollapsed);
+        button.setAttribute('aria-expanded', String(!isCollapsed));
+        outline?.setAttribute('aria-hidden', String(isCollapsed));
+      };
+      const setActiveSection = () => {
+        if (mobileOutline.matches || sections.length === 0) return;
+
+        const anchorOffset = Math.min(window.innerHeight * 0.35, 240);
+        const activeSection = sections.reduce((current, section) => {
+          const top = section.target.getBoundingClientRect().top;
+          return top <= anchorOffset ? section : current;
+        }, sections[0]);
+
+        links.forEach((link) => {
+          const isActive = link === activeSection.link;
+          link.classList.toggle('is-active', isActive);
+          if (isActive) {
+            link.setAttribute('aria-current', 'location');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      };
+
+      setCollapsed(mobileOutline.matches);
+      setActiveSection();
+
+      mobileOutline.addEventListener('change', (event) => {
+        setCollapsed(event.matches);
+        setActiveSection();
+      });
+
+      button.addEventListener('click', () => {
+        setCollapsed(panel.dataset.collapsed !== 'true');
+      });
+
+      outline?.addEventListener('click', (event) => {
+        if (!mobileOutline.matches) return;
+
+        const target = event.target;
+        if (target instanceof Element && target.closest('a')) {
+          setCollapsed(true);
+        }
+      });
+
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (ticking) return;
+
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          setActiveSection();
+          ticking = false;
+        });
+      }, { passive: true });
+      window.addEventListener('resize', setActiveSection);
+    })();
+  </script>
+</BaseLayout>

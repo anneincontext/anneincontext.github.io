@@ -1,0 +1,87 @@
+---
+import { formatDate, getPostPath } from '../lib/posts';
+import type { Lang } from '../lib/locales';
+
+interface Props {
+  posts: Array<{
+    id: string;
+    body?: string;
+    data: {
+      title: string;
+      description: string;
+      date: Date;
+      tags: string[];
+      category: string;
+      lang: Lang;
+      legacyPath?: string;
+    };
+  }>;
+}
+
+const { posts } = Astro.props;
+const lang = posts[0]?.data.lang ?? 'en';
+const sortLabel = lang === 'zh' ? '最新在前' : 'Newest first';
+const sortNextLabel = lang === 'zh' ? '最早在前' : 'Oldest first';
+
+function getReadingTime(post: Props['posts'][number]) {
+  const source = `${post.body ?? ''} ${post.data.description}`;
+  const text = source.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const cjkCharacters = text.match(/[\u4e00-\u9fff]/g)?.length ?? 0;
+  const latinWords = text.replace(/[\u4e00-\u9fff]/g, ' ').match(/\b[\w'-]+\b/g)?.length ?? 0;
+  const minutes = Math.max(1, Math.ceil((latinWords + cjkCharacters / 2) / 220));
+
+  return post.data.lang === 'zh' ? `${minutes} 分钟` : `${minutes} min read`;
+}
+---
+
+<div class="podcast-toolbar">
+  <button
+    class="podcast-sort-button"
+    type="button"
+    data-blog-sort
+    data-order="desc"
+    data-desc-label={sortLabel}
+    data-asc-label={sortNextLabel}
+  >
+    {sortLabel}
+  </button>
+</div>
+<div class="post-list" data-blog-list>
+  {posts.map((post) => (
+    <article class="post-card" data-published-at={post.data.date.toISOString()}>
+      <div class="post-title-line">
+        <h3><a href={getPostPath(post)}>{post.data.title}</a></h3>
+        <span class="read-time">· {getReadingTime(post)}</span>
+      </div>
+      <footer>
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, post.data.lang)}</time>
+      </footer>
+    </article>
+  ))}
+</div>
+
+<script>
+  (() => {
+    const sortButton = document.querySelector('[data-blog-sort]');
+    const list = document.querySelector('[data-blog-list]');
+    if (!(sortButton instanceof HTMLButtonElement) || !(list instanceof HTMLDivElement)) return;
+
+    sortButton.addEventListener('click', () => {
+      const nextOrder = sortButton.dataset.order === 'desc' ? 'asc' : 'desc';
+      const items = Array.from(list.querySelectorAll<HTMLElement>('[data-published-at]'));
+
+      items
+        .sort((a, b) => {
+          const first = Date.parse(a.dataset.publishedAt || '');
+          const second = Date.parse(b.dataset.publishedAt || '');
+          return nextOrder === 'desc' ? second - first : first - second;
+        })
+        .forEach((item) => list.append(item));
+
+      sortButton.dataset.order = nextOrder;
+      sortButton.textContent = nextOrder === 'desc'
+        ? sortButton.dataset.descLabel || 'Newest first'
+        : sortButton.dataset.ascLabel || 'Oldest first';
+    });
+  })();
+</script>

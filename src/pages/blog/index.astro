@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts('en');
+---
+
+<BaseLayout title="Blog" description="English posts by Anne." lang="en" alternatePath="/zh/blog/">
+  <section class="archive-page">
+    {posts.length > 0 ? <PostList posts={posts} /> : <p class="empty-state empty-posts">Coming soon ...</p>}
+  </section>
+</BaseLayout>
