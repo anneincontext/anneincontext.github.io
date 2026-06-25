@@ -1,10 +1,12 @@
+<p align="right">
+  <strong>English</strong> | <a href="https://github.com/anneincontext/anneincontext.github.io/blob/master/README_CN.md">中文</a>
+</p>
+
 # Anne in Context
 
 This repository is the source code for a personal GitHub Pages site and blog. It is built with Astro, outputs fully static files, and is deployed to GitHub Pages through GitHub Actions.
 
 Production site: <https://anneincontext.github.io/>
-
-Chinese README: [README_CN.md](./README_CN.md)
 
 ## What This Site Is
 

@@ -1,10 +1,12 @@
+<p align="right">
+  <strong>中文</strong> | <a href="https://github.com/anneincontext/anneincontext.github.io/blob/master/README.md">English</a>
+</p>
+
 # Anne in Context
 
 这个仓库是一个个人 GitHub Pages 主页和博客系统的源码。它使用 Astro 构建，最终产物是完全静态的 HTML、CSS 和资源文件，通过 GitHub Actions 自动部署到 GitHub Pages。
 
 线上站点：<https://anneincontext.github.io/>
-
-英文 README：[README.md](./README.md)
 
 ## 这是什么
 
