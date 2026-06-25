@@ -654,10 +654,11 @@ h3 {
   border: 0;
 }
 
-.read-time {
+.post-kind {
   color: var(--muted);
   font-size: 0.72rem;
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: 0;
   white-space: nowrap;
 }
 

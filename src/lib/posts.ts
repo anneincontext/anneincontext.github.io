@@ -22,3 +22,7 @@ export function getPostPath(post: { id: string; data: { legacyPath?: string; lan
   if (post.data.legacyPath) return post.data.legacyPath;
   return post.data.lang === 'zh' ? `/zh/blog/${post.id}/` : `/blog/${post.id}/`;
 }
+
+export function isExternalPostPath(path: string) {
+  return /^https?:\/\//.test(path);
+}

@@ -11,6 +11,7 @@ const blog = defineCollection({
     lang: z.enum(['en', 'zh']).default('en'),
     tags: z.array(z.string()).default([]),
     category: z.string().default('Notes'),
+    postType: z.enum(['professional', 'personal']).default('professional'),
     draft: z.boolean().default(false),
     legacyPath: z.string().optional()
   })
