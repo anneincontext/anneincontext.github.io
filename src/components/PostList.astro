@@ -22,6 +22,16 @@ const { posts } = Astro.props;
 const lang = posts[0]?.data.lang ?? 'en';
 const sortLabel = lang === 'zh' ? '最新在前' : 'Newest first';
 const sortNextLabel = lang === 'zh' ? '最早在前' : 'Oldest first';
+const postTypeLabels = {
+  en: {
+    professional: 'professional',
+    personal: 'personal'
+  },
+  zh: {
+    professional: '工作',
+    personal: '生活'
+  }
+} as const;
 ---
 
 <div class="podcast-toolbar">
@@ -53,7 +63,7 @@ const sortNextLabel = lang === 'zh' ? '最早在前' : 'Oldest first';
             </h3>
           );
         })()}
-        <span class="post-kind">{post.data.postType}</span>
+        <span class="post-kind">{postTypeLabels[post.data.lang][post.data.postType]}</span>
       </div>
       <footer>
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, post.data.lang)}</time>
