@@ -39,6 +39,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+body > canvas[id^='c_n'] {
+  pointer-events: none;
+}
+
+.site-header,
+.site-footer,
+main {
+  position: relative;
+  z-index: 1;
+}
+
 a {
   color: var(--ink);
   text-decoration: none;
@@ -748,6 +759,7 @@ h3 {
 }
 
 .post-hero {
+  position: relative;
   padding-bottom: 26px;
   border-bottom: 1px solid var(--line);
 }
@@ -1014,17 +1026,16 @@ h3 {
 
 @media (max-width: 1219px) {
   .post-outline-panel {
-    position: fixed;
-    top: 86px;
-    right: max(14px, calc((100vw - 760px) / 2));
+    position: relative;
     z-index: 8;
     display: grid;
     justify-items: end;
-    max-width: min(320px, calc(100vw - 28px));
-    gap: 10px;
+    width: min(320px, 100%);
+    margin: -2px 0 0 auto;
   }
 
   .post-outline-toggle {
+    order: 1;
     width: 44px;
     min-width: 44px;
     height: 34px;
@@ -1064,6 +1075,10 @@ h3 {
   }
 
   .post-outline {
+    position: absolute;
+    top: 44px;
+    right: 0;
+    order: 2;
     width: min(320px, calc(100vw - 28px));
     max-height: min(62vh, 480px);
     overflow-y: auto;
@@ -1072,9 +1087,11 @@ h3 {
     border-radius: 6px;
     background: var(--paper);
     box-shadow: 0 18px 44px var(--shadow);
+    transform: translateY(0);
   }
 
   .post-outline-panel[data-collapsed='true'] .post-outline {
+    transform: translateY(-4px);
     visibility: hidden;
   }
 

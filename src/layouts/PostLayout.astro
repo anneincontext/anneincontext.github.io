@@ -26,36 +26,6 @@ const outlineToggleLabel = lang === 'zh' ? '显示或隐藏目录' : 'Show or hi
 
 <BaseLayout title={title} description={description} lang={lang}>
   <article class="post-shell">
-    {
-      outlineHeadings.length > 0 && (
-        <div
-          class="post-outline-panel"
-          data-post-outline
-        >
-          <nav class="post-outline" id="post-outline-list" aria-label={outlineLabel}>
-            <p>{outlineLabel}</p>
-            <ol>
-              {outlineHeadings.map((heading, index) => (
-                <li class={`post-outline-depth-${heading.depth}`} style={`--outline-index: ${index}`}>
-                  <a href={`#${heading.slug}`} data-outline-link={heading.slug}>{heading.text}</a>
-                </li>
-              ))}
-            </ol>
-          </nav>
-          <button
-            class="post-outline-toggle"
-            type="button"
-            aria-controls="post-outline-list"
-            aria-expanded="true"
-            aria-label={outlineToggleLabel}
-            title={outlineToggleLabel}
-            data-post-outline-toggle
-          >
-            <span aria-hidden="true"></span>
-          </button>
-        </div>
-      )
-    }
     <a class="eyebrow-link" href={locale.blogPath}>← {locale.backToBlog}</a>
     <header class="post-hero">
       <h2>{title}</h2>
@@ -66,6 +36,36 @@ const outlineToggleLabel = lang === 'zh' ? '显示或隐藏目录' : 'Show or hi
         {tags.length > 0 && <span aria-hidden="true">·</span>}
         {tags.length > 0 && <span>{tags.join(' / ')}</span>}
       </div>
+      {
+        outlineHeadings.length > 0 && (
+          <div
+            class="post-outline-panel"
+            data-post-outline
+          >
+            <nav class="post-outline" id="post-outline-list" aria-label={outlineLabel}>
+              <p>{outlineLabel}</p>
+              <ol>
+                {outlineHeadings.map((heading, index) => (
+                  <li class={`post-outline-depth-${heading.depth}`} style={`--outline-index: ${index}`}>
+                    <a href={`#${heading.slug}`} data-outline-link={heading.slug}>{heading.text}</a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+            <button
+              class="post-outline-toggle"
+              type="button"
+              aria-controls="post-outline-list"
+              aria-expanded="true"
+              aria-label={outlineToggleLabel}
+              title={outlineToggleLabel}
+              data-post-outline-toggle
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+        )
+      }
     </header>
     <div class="post-content">
       <slot />
