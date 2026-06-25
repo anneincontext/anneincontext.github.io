@@ -3,13 +3,63 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Not Found" description="这个页面没有找到。">
-  <section class="page-heading">
-    <p class="eyebrow">404</p>
-    <h1>页面没有找到</h1>
-    <p>可能是旧链接已经变化，或者这个页面还没有被创建。可以回到博客归档继续浏览。</p>
-    <div class="hero-actions">
-      <a class="button primary" href="/blog/">Go to Blog</a>
-      <a class="button" href="/">Home</a>
+  <section class="not-found-page" aria-labelledby="not-found-title">
+    <figure class="not-found-portrait">
+      <img
+        src="/images/404-watching-you.png"
+        alt="Anne watching the missing page"
+        width="433"
+        height="577"
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
+    <div class="not-found-copy">
+      <h1 id="not-found-title">404</h1>
+      <div class="not-found-locale" data-not-found-lang="en" lang="en">
+        <p class="not-found-label">Not Found</p>
+        <p class="not-found-message">
+          I am watching this page too,<br />
+          but it seems to have wandered off ～
+        </p>
+        <div class="not-found-actions" aria-label="404 navigation">
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+        </div>
+      </div>
+      <div class="not-found-locale" data-not-found-lang="zh" lang="zh-CN">
+        <p class="not-found-label">页面没有找到</p>
+        <p class="not-found-message">
+          我也在看，<br />
+          但它好像不在这儿～
+        </p>
+        <div class="not-found-actions" aria-label="404 导航">
+          <a href="/zh/">首页</a>
+          <a href="/zh/blog/">博客</a>
+        </div>
+      </div>
     </div>
   </section>
+  <script is:inline>
+    (() => {
+      const root = document.documentElement;
+      const normalizedPath = location.pathname.endsWith('/')
+        ? location.pathname
+        : `${location.pathname}/`;
+      const isZhPath = normalizedPath.startsWith('/zh/');
+
+      try {
+        const storedLanguage = localStorage.getItem('anne:language');
+        const browserLanguages = navigator.languages?.length
+          ? navigator.languages
+          : [navigator.language];
+        const browserPrefersZh = browserLanguages.some((value) => /^zh\b/i.test(value));
+        root.dataset.notFoundLang = isZhPath || storedLanguage === 'zh' || (!storedLanguage && browserPrefersZh)
+          ? 'zh'
+          : 'en';
+      } catch {
+        root.dataset.notFoundLang = isZhPath ? 'zh' : 'en';
+      }
+    })();
+  </script>
 </BaseLayout>

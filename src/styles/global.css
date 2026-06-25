@@ -238,6 +238,105 @@ main {
   padding: 56px 0 34px;
 }
 
+.not-found-page {
+  display: grid;
+  grid-template-columns: minmax(150px, 230px) minmax(0, 520px);
+  gap: clamp(34px, 7vw, 72px);
+  align-items: center;
+  justify-content: center;
+  min-height: min(58vh, 620px);
+  padding: clamp(44px, 8vw, 88px) 0 70px;
+}
+
+.not-found-portrait {
+  justify-self: end;
+  width: min(100%, 210px);
+  margin: 0;
+}
+
+.not-found-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 16px 28px rgba(38, 48, 61, 0.12));
+}
+
+[data-theme='dark'] .not-found-portrait img {
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.35));
+}
+
+.not-found-copy {
+  align-self: center;
+  color: var(--ink);
+}
+
+.not-found-copy h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(4.6rem, 12vw, 8rem);
+  font-weight: 700;
+  line-height: 0.85;
+}
+
+.not-found-label,
+.not-found-message {
+  margin: 0;
+  max-width: 440px;
+  color: var(--muted);
+}
+
+.not-found-label {
+  margin-top: 12px;
+  color: var(--ink);
+  font-size: clamp(1.7rem, 4vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.not-found-message {
+  margin-top: 14px;
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  line-height: 1.6;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 30px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.not-found-actions a {
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  color: var(--muted);
+  transition:
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.not-found-actions a:hover,
+.not-found-actions a:focus-visible {
+  border-bottom-color: var(--ink);
+  color: var(--ink);
+}
+
+.not-found-actions a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.not-found-locale[data-not-found-lang='zh'],
+html[data-not-found-lang='zh'] .not-found-locale[data-not-found-lang='en'] {
+  display: none;
+}
+
+html[data-not-found-lang='zh'] .not-found-locale[data-not-found-lang='zh'] {
+  display: block;
+}
+
 .about-hero {
   display: grid;
   grid-template-columns: minmax(150px, 190px) minmax(0, 720px);
@@ -894,6 +993,28 @@ h3 {
 
   .page-heading {
     padding-top: 34px;
+  }
+
+  .not-found-page {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 34px 20px 46px;
+    text-align: center;
+  }
+
+  .not-found-portrait {
+    justify-self: center;
+    width: min(62vw, 220px);
+  }
+
+  .not-found-label,
+  .not-found-message {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .not-found-actions {
+    justify-content: center;
   }
 
   .about-hero {
