@@ -109,7 +109,8 @@ const formatDate = (value: string) =>
         <button
           class="podcast-sort-button"
           type="button"
-          data-podcast-sort
+          data-sort-button
+          data-sort-list="[data-podcast-list]"
           data-order="desc"
           data-desc-label={sortLabel}
           data-asc-label={sortNextLabel}
@@ -137,29 +138,3 @@ const formatDate = (value: string) =>
     <p class="empty-state empty-podcasts">Coming soon ...</p>
   )}
 </section>
-
-<script>
-  (() => {
-    const sortButton = document.querySelector('[data-podcast-sort]');
-    const list = document.querySelector('[data-podcast-list]');
-    if (!(sortButton instanceof HTMLButtonElement) || !(list instanceof HTMLOListElement)) return;
-
-    sortButton.addEventListener('click', () => {
-      const nextOrder = sortButton.dataset.order === 'desc' ? 'asc' : 'desc';
-      const items = Array.from(list.querySelectorAll<HTMLLIElement>('li[data-published-at]'));
-
-      items
-        .sort((a, b) => {
-          const first = Date.parse(a.dataset.publishedAt || '');
-          const second = Date.parse(b.dataset.publishedAt || '');
-          return nextOrder === 'desc' ? second - first : first - second;
-        })
-        .forEach((item) => list.append(item));
-
-      sortButton.dataset.order = nextOrder;
-      sortButton.textContent = nextOrder === 'desc'
-        ? sortButton.dataset.descLabel || 'Newest first'
-        : sortButton.dataset.ascLabel || 'Oldest first';
-    });
-  })();
-</script>

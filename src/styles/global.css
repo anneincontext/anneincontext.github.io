@@ -202,18 +202,12 @@ main {
 
 .theme-toggle-icon {
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.8;
-}
-
-.theme-toggle-icon {
-  width: 15px;
-  height: 15px;
   stroke-width: 2;
 }
 
@@ -240,7 +234,6 @@ main {
   min-height: 58vh;
 }
 
-.home-intro,
 .page-heading {
   padding: 56px 0 34px;
 }
@@ -250,12 +243,6 @@ main {
   grid-template-columns: minmax(150px, 190px) minmax(0, 720px);
   gap: clamp(34px, 7vw, 34px);
   align-items: start;
-}
-
-.site-subtitle {
-  margin: 0 0 10px;
-  color: var(--faint);
-  font-size: 0.95rem;
 }
 
 h1,
@@ -278,7 +265,6 @@ h3 {
   font-size: 1.2rem;
 }
 
-.home-intro p,
 .page-heading p,
 .about-copy p {
   max-width: 640px;
@@ -302,25 +288,8 @@ h3 {
   padding-top: 8px;
 }
 
-.about-copy .about-kicker {
-  margin: 0 0 8px;
-  color: var(--faint);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
 .about-copy h1 {
   margin-bottom: 12px;
-}
-
-.about-copy .about-intro {
-  margin: 0 0 22px;
-  color: var(--ink);
-  font-size: clamp(1.15rem, 2vw, 1.42rem);
-  line-height: 1.55;
 }
 
 .about-copy p:first-of-type {
@@ -440,22 +409,6 @@ h3 {
   font-weight: 400;
   line-height: 1.45;
   word-break: break-word;
-}
-
-.about-social {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.section-block {
-  padding: 30px 0 48px;
-  border-top: 1px solid var(--line);
-}
-
-.section-block h2 {
-  margin-bottom: 18px;
 }
 
 .podcast-section {
@@ -578,6 +531,49 @@ h3 {
   font-size: 1.15rem;
   font-weight: 600;
   text-align: center;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 0 16px;
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  border-color: var(--ink);
+  box-shadow: 0 8px 18px var(--shadow);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.button.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
 }
 
 .eyebrow {
@@ -768,11 +764,6 @@ h3 {
   font-size: clamp(2rem, 6vw, 3rem);
 }
 
-.lede {
-  max-width: 680px;
-  color: var(--muted);
-}
-
 .post-content {
   padding-top: 30px;
   font-size: 14px;
@@ -808,8 +799,7 @@ h3 {
   font-size: 0.92em;
 }
 
-.post-content pre,
-.post-content figure.highlight {
+.post-content pre {
   overflow-x: auto;
   margin: 22px 0;
   border: 1px solid var(--line);
@@ -824,29 +814,6 @@ h3 {
 .post-content pre code {
   padding: 0;
   background: transparent;
-}
-
-.post-content figure.highlight table {
-  width: 100%;
-  border-spacing: 0;
-}
-
-.post-content figure.highlight pre {
-  margin: 0;
-  padding: 14px;
-  background: transparent;
-}
-
-.post-content figure.highlight .gutter {
-  width: 1%;
-  user-select: none;
-  border-right: 1px solid #e5e5e5;
-  color: #aaa;
-  text-align: right;
-}
-
-.post-content figure.highlight .code {
-  min-width: 620px;
 }
 
 .site-footer {
@@ -890,21 +857,6 @@ h3 {
   color: var(--ink);
 }
 
-.social-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
-.social-links a {
-  color: var(--muted);
-  border: 0;
-}
-
-.social-links a:hover {
-  color: var(--ink);
-}
-
 @media (max-width: 680px) {
   .site-footer {
     align-items: flex-start;
@@ -921,10 +873,6 @@ h3 {
     align-items: center;
     gap: 14px;
     padding: 26px 0 20px;
-  }
-
-  .brand {
-    flex: 0 0 auto;
   }
 
   .header-actions {
@@ -944,7 +892,6 @@ h3 {
     font-size: 0.98rem;
   }
 
-  .home-intro,
   .page-heading {
     padding-top: 34px;
   }
@@ -986,11 +933,6 @@ h3 {
   .about-facts li + li {
     padding-top: 18px;
     border-top: 1px solid var(--line);
-  }
-
-  .about-social {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
   .archive-page {

@@ -38,7 +38,8 @@ function getReadingTime(post: Props['posts'][number]) {
   <button
     class="podcast-sort-button"
     type="button"
-    data-blog-sort
+    data-sort-button
+    data-sort-list="[data-blog-list]"
     data-order="desc"
     data-desc-label={sortLabel}
     data-asc-label={sortNextLabel}
@@ -59,29 +60,3 @@ function getReadingTime(post: Props['posts'][number]) {
     </article>
   ))}
 </div>
-
-<script>
-  (() => {
-    const sortButton = document.querySelector('[data-blog-sort]');
-    const list = document.querySelector('[data-blog-list]');
-    if (!(sortButton instanceof HTMLButtonElement) || !(list instanceof HTMLDivElement)) return;
-
-    sortButton.addEventListener('click', () => {
-      const nextOrder = sortButton.dataset.order === 'desc' ? 'asc' : 'desc';
-      const items = Array.from(list.querySelectorAll<HTMLElement>('[data-published-at]'));
-
-      items
-        .sort((a, b) => {
-          const first = Date.parse(a.dataset.publishedAt || '');
-          const second = Date.parse(b.dataset.publishedAt || '');
-          return nextOrder === 'desc' ? second - first : first - second;
-        })
-        .forEach((item) => list.append(item));
-
-      sortButton.dataset.order = nextOrder;
-      sortButton.textContent = nextOrder === 'desc'
-        ? sortButton.dataset.descLabel || 'Newest first'
-        : sortButton.dataset.ascLabel || 'Oldest first';
-    });
-  })();
-</script>

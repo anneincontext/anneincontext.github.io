@@ -195,6 +195,33 @@ const githubAvatarTouchIcon = 'https://github.com/anneincontext.png?size=180';
             // Theme preference is optional; the visual toggle can still work for this page.
           }
         });
+
+        document.querySelectorAll('[data-sort-button]').forEach((sortButton) => {
+          if (!(sortButton instanceof HTMLButtonElement)) return;
+
+          const listSelector = sortButton.dataset.sortList;
+          const list = listSelector ? document.querySelector(listSelector) : null;
+          if (!(list instanceof HTMLElement)) return;
+
+          sortButton.addEventListener('click', () => {
+            const nextOrder = sortButton.dataset.order === 'desc' ? 'asc' : 'desc';
+            const items = Array.from(list.querySelectorAll('[data-published-at]'))
+              .filter((item) => item instanceof HTMLElement);
+
+            items
+              .sort((a, b) => {
+                const first = Date.parse(a.dataset.publishedAt || '');
+                const second = Date.parse(b.dataset.publishedAt || '');
+                return nextOrder === 'desc' ? second - first : first - second;
+              })
+              .forEach((item) => list.append(item));
+
+            sortButton.dataset.order = nextOrder;
+            sortButton.textContent = nextOrder === 'desc'
+              ? sortButton.dataset.descLabel || 'Newest first'
+              : sortButton.dataset.ascLabel || 'Oldest first';
+          });
+        });
       })();
     </script>
     <script is:inline src="/lib/canvas-nest/canvas-nest.min.js"></script>
