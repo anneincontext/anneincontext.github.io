@@ -28,6 +28,28 @@ const normalizedPath = Astro.url.pathname.endsWith('/')
   ? Astro.url.pathname
   : `${Astro.url.pathname}/`;
 const isHomePage = normalizedPath === '/' || normalizedPath === '/zh/';
+const isCurrentPath = (path: string) => {
+  const normalizedTarget = path.endsWith('/') ? path : `${path}/`;
+
+  return normalizedPath === normalizedTarget || normalizedPath.startsWith(normalizedTarget);
+};
+const navItems = [
+  {
+    href: locale.blogPath,
+    label: locale.blogLabel,
+    isCurrent: isCurrentPath(locale.blogPath)
+  },
+  {
+    href: locale.podcastPath,
+    label: locale.podcastLabel,
+    isCurrent: isCurrentPath(locale.podcastPath)
+  },
+  {
+    href: '/rss.xml',
+    label: locale.rssLabel,
+    isCurrent: Astro.url.pathname === '/rss.xml'
+  }
+];
 const githubAvatarIcon = 'https://github.com/anneincontext.png?size=64';
 const githubAvatarTouchIcon = 'https://github.com/anneincontext.png?size=180';
 ---
@@ -81,9 +103,15 @@ const githubAvatarTouchIcon = 'https://github.com/anneincontext.png?size=180';
       )}
       <div class="header-actions">
         <nav class="site-nav" aria-label="Primary">
-          <a href={locale.blogPath}>{locale.blogLabel}</a>
-          <a href={locale.podcastPath}>{locale.podcastLabel}</a>
-          <a href="/rss.xml">RSS</a>
+          {navItems.map((item) => (
+            <a
+              class:list={[{ 'is-active': item.isCurrent }]}
+              href={item.href}
+              aria-current={item.isCurrent ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
         <button class="theme-toggle icon-button" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
           <span class="theme-toggle-track" aria-hidden="true">
